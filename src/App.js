@@ -1,7 +1,7 @@
 import './App.css';
 import { Route, Routes as Switch, Navigate } from "react-router-dom";
 import Home from './Home';
-import SignIn from './SignIn';
+import Authentication from './SignIn';
 import Dashboard from './Dashboard';
 import Navbar from "./Navbar.jsx"
 import { useContext } from 'react';
@@ -33,7 +33,7 @@ function App() {
       <Navbar />
       <Switch>
         <Route exact path="/" element={<Home />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signin" element={<Authentication />} />
         <Route path="/dashboard"
           element={
             <ProtectedRoute user={user}>

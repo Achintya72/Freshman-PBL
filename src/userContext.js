@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 const UserContext = createContext(null);
 
@@ -20,8 +20,21 @@ function UserContextProvider({ children }) {
             })
     }
 
+    function createUserEmailPassword(email, password, name) {
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(response => {
+                const db = getFirestore();
+                const userDocRef = doc(db, 'users', response.user.uid)
+                setDoc(userDocRef, { name }, { merge: true, mergeFields: true })
+                    .then(document => {
+                        setUser(prev => ({ ...prev, name }))
+                    })
+            })
+    }
+
     return (
-        <UserContext.Provider value={{ user, signInEmailPassword }}>
+        <UserContext.Provider value={{ user, signInEmailPassword, createUserEmailPassword }}>
             {children}
         </UserContext.Provider>
     )
