@@ -22,15 +22,16 @@ function UserContextProvider({ children }) {
             })
     }
 
-    function createUserEmailPassword(email, password, name) {
+    function createUserEmailPassword(email, password, data) {
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
             .then(response => {
                 const db = getFirestore();
                 const userDocRef = doc(db, 'users', response.user.uid)
-                setDoc(userDocRef, { name }, { merge: true, mergeFields: true })
+                setDoc(userDocRef, { ...data }, { merge: true, mergeFields: true })
                     .then(document => {
-                        setUser(prev => ({ ...prev, name }))
+                        setUser(prev => ({ ...prev, ...data }))
+                        navigate('/dashboard')
                     })
             })
     }

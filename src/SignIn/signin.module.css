@@ -7,3 +7,59 @@
     display: flex;
     flex-direction: column;
 }
+
+.status {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.location {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+}
+
+.inactive {
+    background-color: grey;
+    color: #fff;
+}
+
+.active {
+    background-color: #ff0000;
+    color: #fff;
+}
+
+.groupCard {
+    border: 1px solid grey;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 20px;
+}
+
+.groupCard img {
+    width: 80%;
+}
+
+.groups {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.selected {
+    background-color: #ffe9e9;
+    border: 2px solid #ff0000;
+
+}
+
+.selected p {
+    font-weight: 600;
+}

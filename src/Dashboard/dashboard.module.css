@@ -1,0 +1,78 @@
+.tasks {
+    background-color: #FF9393;
+    padding: 15px 20px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-items: flex-start;
+}
+
+.active {
+    background-color: #FF0000 !important;
+}
+
+.home {
+    height: 30px;
+    width: 30px;
+    background-color: grey;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-image: url("../Assets/Home.svg");
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    box-shadow: rgba(255, 0, 0, 0.15) 0px -5px 20px;
+    position: fixed;
+    bottom: 0;
+    left: 40px;
+    right: 40px;
+    justify-self: center;
+    border-radius: 30px 30px 0 0;
+}
+
+.community {
+    height: 30px;
+    width: 30px;
+    background-color: grey;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-image: url("../Assets/Community.svg");
+}
+
+.leaderboard {
+    height: 30px;
+    width: 30px;
+    background-color: grey;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-image: url("../Assets/Leaderboard.svg");
+}
+
+.settings {
+    height: 30px;
+    width: 30px;
+    background-color: grey;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-image: url("../Assets/Settings.svg");
+}
