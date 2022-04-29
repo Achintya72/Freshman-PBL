@@ -1,6 +1,7 @@
 import styles from "./signin.module.css";
 import { useContext, useState } from "react";
 import UserContext from "../userContext";
+import SignUp from "./signUp";
 
 const useLoginDetails = (initialState) => {
     const [details, setDetails] = useState(initialState);
@@ -13,7 +14,7 @@ const useLoginDetails = (initialState) => {
     return [details, handleChange];
 }
 
-export default function Authentication() {
+function Authentication() {
     const [signIn, setSignIn] = useState(true);
     return (
         <>
@@ -67,56 +68,4 @@ function SignIn({ callBack }) {
     )
 }
 
-function SignUp({ callBack }) {
-    const [{ email, password, name }, handleChange] = useLoginDetails({
-        email: '',
-        password: '',
-        name: ''
-    });
-    const [loading, setLoading] = useState(false);
-    const { createUserEmailPassword } = useContext(UserContext)
-    function signUp() {
-        setLoading(true);
-        createUserEmailPassword(email, password, name);
-    }
-    return (
-        <div className={styles.container}>
-            {!loading ?
-                (
-                    <>
-                        <h1>Sign Up</h1>
-                        <input
-                            name="name"
-                            className={styles.input}
-                            type="text"
-                            placeholder="Name"
-                            onChange={handleChange}
-                            value={name}
-                        />
-                        <input
-                            name="email"
-                            className={styles.input}
-                            type=" email"
-                            placeholder="Email"
-                            onChange={handleChange}
-                            value={email}
-                        />
-                        <input
-                            name="password"
-                            className={styles.input}
-                            type="password"
-                            placeholder="Password"
-                            onChange={handleChange}
-                            value={password}
-                        />
-
-                        <a className="button" onClick={signUp}>Sign Up</a>
-                        <p>Already Have an Account? <a onClick={() => callBack(true)}>Sign In</a></p>
-                    </>
-                ) : (
-                    <h2 style={{ textAlign: 'center' }}>Loading...</h2>
-                )
-            }
-        </div>
-    )
-}
+export { Authentication as default, useLoginDetails }

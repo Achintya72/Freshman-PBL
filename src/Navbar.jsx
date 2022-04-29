@@ -38,7 +38,7 @@ export default function Navbar(props) {
                                 <Link to="/dashboard">
                                     <p style={{ color: "#000000" }}>Dashboard</p>
                                 </Link>
-                                <a clasName="button" onClick={signOutUser}>Sign Out</a>
+                                <a><p onClick={signOutUser}>SIGN OUT</p></a>
                             </>) : <Link to="/signin">
                             <p style={{ color: '#000000' }}>Sign In</p>
                         </Link>
