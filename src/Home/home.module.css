@@ -7,7 +7,7 @@
 
 
 .button {
-    position: absolute;
+    margin-top: 2rem;
     bottom: 20px;
     width: min(350px, 100%);
 
