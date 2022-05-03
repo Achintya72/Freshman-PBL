@@ -1,9 +1,4 @@
-import { Link } from "react-router-dom";
 import { useState } from "react"
-import Home from "../Assets/Home.svg";
-import Settings from "../Assets/Settings.svg"
-import Community from "../Assets/Community.svg";
-import Leaderboard from "../Assets/Leaderboard.svg";
 import styles from "./dashboard.module.css"
 
 const pages = [

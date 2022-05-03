@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom"
 
 const UserContext = createContext(null);
@@ -44,8 +44,30 @@ function UserContextProvider({ children }) {
         })
     }
 
+    function fetchUserTasks() {
+        const db = getFirestore();
+        const tasksCollection = collection(db, "tasks");
+        const levelDocRef = doc(tasksCollection, user.level)
+        const userLevelCollection = collection(levelDocRef, user.group)
+        getDocs(userLevelCollection)
+            .then((snapshot) => {
+                let data = [];
+                snapshot.docs.forEach(doc => {
+                    data.push(doc.data());
+                });
+                setUser(prev => ({ ...prev, tasks: data }))
+            })
+    }
+
+    const value = {
+        user,
+        signInEmailPassword,
+        createUserEmailPassword,
+        signOutUser,
+        fetchUserTasks
+    }
     return (
-        <UserContext.Provider value={{ user, signInEmailPassword, createUserEmailPassword, signOutUser }}>
+        <UserContext.Provider value={value}>
             {children}
         </UserContext.Provider>
     )
