@@ -5,7 +5,6 @@ import { Timestamp } from "firebase/firestore";
 import CloseIcon from "../Assets/Close.svg"
 function Dashboard({ shift, tasks }) {
     const { user } = useContext(UserContext);
-    console.log(tasks);
     let tasksExist = false;
     tasks.forEach(task => {
         if (task) {
@@ -37,8 +36,6 @@ function Tasks({ shift, tasks }) {
 
     function complete(task) {
         let index = userTasks.indexOf(task);
-        console.log(index);
-        console.log(user.id);
         completeTask(index);
     }
     return (

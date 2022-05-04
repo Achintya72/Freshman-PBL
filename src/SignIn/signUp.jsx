@@ -68,7 +68,6 @@ function RolePicker({ callBack, setState, initialState }) {
         setState(prev => ({ ...prev, group }));
         callBack();
     }
-    console.log(group)
     return (
         <div className={styles.container}>
             <h3>Choose your Age Group</h3>
@@ -100,12 +99,11 @@ function SignUp({ callBack }) {
         name: '',
         email: '',
         password: '',
-        group: ''
+        group: 'Juniors'
     })
     const { createUserEmailPassword } = useContext(UserContext);
     const [stage, setStage] = useState(0);
     const Component = stages[stage];
-    console.log(data)
     const nextStage = () => {
         if (stage < stages.length - 1) {
             if (!(!data.email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(data.email))) {
@@ -120,7 +118,6 @@ function SignUp({ callBack }) {
                 group: data.group,
                 name: data.name
             }
-            console.log(vals)
             createUserEmailPassword(data.email, data.password, vals)
         }
     }

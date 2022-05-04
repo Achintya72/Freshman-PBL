@@ -9,6 +9,12 @@ function UserContextProvider({ children }) {
     const [user, setUser] = useState(null);
     const [userTasks, setUserTasks] = useState(null);
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (user) {
+            fetchUserTasks();
+        }
+    }, [user])
     function signInEmailPassword(email, password) {
         const auth = getAuth()
         signInWithEmailAndPassword(auth, email, password)
@@ -22,7 +28,6 @@ function UserContextProvider({ children }) {
                     })
             })
     }
-
     function createUserEmailPassword(email, password, data) {
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
@@ -48,7 +53,7 @@ function UserContextProvider({ children }) {
     function fetchUserTasks() {
         const db = getFirestore();
         const tasksCollection = collection(db, "tasks");
-        const levelDocRef = doc(tasksCollection, user.level)
+        const levelDocRef = doc(tasksCollection, (user?.level ?? "1"))
         const userLevelCollection = collection(levelDocRef, user.group)
         getDocs(userLevelCollection)
             .then((snapshot) => {
@@ -63,7 +68,7 @@ function UserContextProvider({ children }) {
     function completeTask(index) {
         const db = getFirestore();
         const userRef = doc(collection(db, 'users'), user.id)
-        let newUserTasks = user.tasksComplete
+        let newUserTasks = (user?.tasksComplete ?? [0, 0, 0])
         newUserTasks[index] = Timestamp.fromDate(new Date());
         let points = (user?.points ?? 0) + userTasks[index].points
         setDoc(userRef, { tasksComplete: newUserTasks, points }, { merge: true, mergeFields: true })
