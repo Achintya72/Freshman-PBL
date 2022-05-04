@@ -49,11 +49,11 @@ function LoginDetails({ callBack, setState, initialState }) {
 }
 const groups = [
     {
-        val: 'Youth',
+        val: 'Juniors',
         image: BoyImg
     },
     {
-        val: 'Adult',
+        val: 'Adults',
         image: LadyImg
     },
     {

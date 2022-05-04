@@ -36,6 +36,7 @@
     right: 40px;
     justify-self: center;
     border-radius: 30px 30px 0 0;
+    background-color: #fff;
 }
 
 .community {
@@ -75,4 +76,22 @@
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     mask-image: url("../Assets/Settings.svg");
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    background-color: #FF9393;
+    padding: 15px 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.task .details {
+    flex: 8;
+}
+
+.task .actions a {
+    flex: 1;
+    margin-bottom: 10px;
 }
