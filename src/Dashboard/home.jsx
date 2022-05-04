@@ -3,46 +3,33 @@ import UserContext from "../userContext";
 import { useContext, useEffect, useState } from "react"
 import { Timestamp } from "firebase/firestore";
 import CloseIcon from "../Assets/Close.svg"
-function Dashboard({ callBack }) {
+function Dashboard({ shift, tasks }) {
     const { user } = useContext(UserContext);
-    let newTasks = false;
-    let lastCompleted = user.tasksCompleted ?? Timestamp.fromDate(new Date(0));
-    lastCompleted = lastCompleted.toDate()
-    if (lastCompleted.getDate() != new Date().getDate()) {
-        newTasks = true
-    }
-    else if (lastCompleted.getMonth() != new Date().getMonth()) {
-        newTasks = true
-    }
-    else if (lastCompleted.getFullYear() != new Date().getFullYear()) {
-        newTasks = true
-    }
     return (
         <>
             <h2>Welcome, {user.name}</h2>
-            <p>{newTasks && (
+            <p>{tasks.length !== [false, false, false] && (
                 <div className={styles.tasks}>
                     <h3>You've Got New Tasks</h3>
-                    <a className="button" onClick={() => callBack(1)}>View Tasks</a>
+                    <a className="button" onClick={() => shift(1)}>View Tasks</a>
                 </div>
             )}</p>
         </>
     )
 }
-function Tasks({ callBack }) {
+function Tasks({ shift, tasks }) {
     const { user, fetchUserTasks } = useContext(UserContext);
     useEffect(() => {
         fetchUserTasks()
     }, []);
-    let tasks = user?.tasks ?? [{
-        Name: 'Loading',
-        Description: "Loading..."
-    }]
+    let displayTasks = (user?.tasks ?? []).filter((item, index) => {
+        return tasks[index]
+    })
     console.log(tasks);
     return (
         <div>
-            <img src={CloseIcon} onClick={() => callBack(0)} style={{ marginBottom: '10px' }} />
-            {tasks.map(task => (
+            <img src={CloseIcon} onClick={() => shift(0)} style={{ marginBottom: '10px' }} />
+            {displayTasks.map(task => (
                 <div className={styles.task}>
                     <div className={styles.details}>
                         <h3>{task.Name}</h3>
@@ -64,11 +51,16 @@ const pages = [
 ]
 
 export default function Home(props) {
-    const { user } = useContext(UserContext);
     const [page, setPage] = useState(0);
     const Component = pages[page];
-
+    const { user } = useContext(UserContext);
+    let updatedTasks = (user?.tasksComplete ?? [0, 0, 0]).map(date => {
+        if (Timestamp.fromDate(new Date()) - date > (24 * 3600)) {
+            return true;
+        }
+        return false;
+    })
     return (
-        <Component callBack={setPage} />
+        <Component shift={setPage} tasks={updatedTasks} />
     )
 }

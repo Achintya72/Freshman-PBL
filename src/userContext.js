@@ -55,6 +55,7 @@ function UserContextProvider({ children }) {
                 snapshot.docs.forEach(doc => {
                     data.push(doc.data());
                 });
+                data.sort((a, b) => a.index - b.index)
                 setUser(prev => ({ ...prev, tasks: data }))
             })
     }
