@@ -5,10 +5,19 @@ import { Timestamp } from "firebase/firestore";
 import CloseIcon from "../Assets/Close.svg"
 function Dashboard({ shift, tasks }) {
     const { user } = useContext(UserContext);
+    console.log(tasks);
+    let tasksExist = false;
+    tasks.forEach(task => {
+        if (task) {
+            tasksExist = true;
+            return;
+        }
+    })
     return (
         <>
+            <p>Points: {user.points ?? 0}</p>
             <h2>Welcome, {user.name}</h2>
-            <p>{tasks.length !== [false, false, false] && (
+            <p>{tasksExist && (
                 <div className={styles.tasks}>
                     <h3>You've Got New Tasks</h3>
                     <a className="button" onClick={() => shift(1)}>View Tasks</a>
@@ -18,32 +27,42 @@ function Dashboard({ shift, tasks }) {
     )
 }
 function Tasks({ shift, tasks }) {
-    const { user, fetchUserTasks } = useContext(UserContext);
+    const { user, fetchUserTasks, userTasks, completeTask } = useContext(UserContext);
     useEffect(() => {
         fetchUserTasks()
     }, []);
-    let displayTasks = (user?.tasks ?? []).filter((item, index) => {
+    let displayTasks = (userTasks ?? []).filter((item, index) => {
         return tasks[index]
     })
-    console.log(tasks);
+
+    function complete(task) {
+        let index = userTasks.indexOf(task);
+        console.log(index);
+        console.log(user.id);
+        completeTask(index);
+    }
     return (
         <div>
             <img src={CloseIcon} onClick={() => shift(0)} style={{ marginBottom: '10px' }} />
             {displayTasks.map(task => (
-                <div className={styles.task}>
-                    <div className={styles.details}>
-                        <h3>{task.Name}</h3>
-                        <p>{task.Description}</p>
-                    </div>
-                    <div className={styles.actions}>
-                        <a className="button">Complete</a>
-                        <a className="button">Switch</a>
-                    </div>
-                </div>
+                <Task task={task} complete={complete} />
             ))}
         </div>
     )
 }
+
+const Task = ({ task, complete }) => (
+    <div className={styles.task}>
+        <div className={styles.details}>
+            <h3>{task.Name}</h3>
+            <p>{task.Description}</p>
+        </div>
+        <div className={styles.actions}>
+            <a className="button" onClick={() => complete(task)}>Complete</a>
+            <a className="button">Switch</a>
+        </div>
+    </div>
+)
 
 const pages = [
     Dashboard,
