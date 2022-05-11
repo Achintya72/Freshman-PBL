@@ -1,5 +1,7 @@
+import styles from "./dashboard.module.css";
+
 export default function Leaderboard(props) {
     return (
-        <p>Leaderboard</p>
+        <p className={styles.bottom}>Leaderboard</p>
     )
 }

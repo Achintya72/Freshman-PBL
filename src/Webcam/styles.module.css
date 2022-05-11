@@ -1,0 +1,18 @@
+.container {
+    background-color: white;
+    padding: 0 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.6) 50px 50px 1000px;
+    border-radius: 20px;
+}
+
+.container a {
+    margin-bottom: 10px;
+}
