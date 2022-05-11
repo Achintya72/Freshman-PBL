@@ -65,6 +65,10 @@
     mask-image: url("../Assets/Leaderboard.svg");
 }
 
+.bottom {
+    padding-bottom: 5rem;
+}
+
 .settings {
     height: 30px;
     width: 30px;
@@ -80,7 +84,7 @@
 
 .task {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     background-color: #FF9393;
     padding: 15px 20px;
     border-radius: 20px;
