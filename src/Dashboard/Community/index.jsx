@@ -210,11 +210,12 @@ export default function Community(props) {
                                 <h3>{group.name}</h3>
                                 <a className="button" onClick={() => joinGroup(group.id)}>Join</a>
                             </div>
-                            <div className={styles.new} onClick={newGroup}>
-                                <div />
-                            </div>
+
                         </>
                     ))}
+                    <div className={styles.new} onClick={newGroup}>
+                        <div />
+                    </div>
                 </div>
             }
         </div>
