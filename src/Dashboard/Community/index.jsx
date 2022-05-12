@@ -1,4 +1,4 @@
-import { collection, getFirestore, doc, getDoc, setDoc, onSnapshot, addDoc, Timestamp } from "firebase/firestore";
+import { collection, getFirestore, doc, getDoc, setDoc, onSnapshot, addDoc, Timestamp, getDocs } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../userContext";
 import styles from "./styles.module.css";
@@ -142,31 +142,80 @@ const pages = [
     Chat,
     Posts
 ]
+function unsub() { }
+
 export default function Community(props) {
     const [page, setPages] = useState(0);
     const [group, setGroup] = useState(null);
+    const [groups, setGroups] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const Component = pages[page];
     useEffect(() => {
+        const firestore = getFirestore();
+        const groupsCollection = collection(firestore, 'groups');
         if (user.groupId) {
-            const firestore = getFirestore();
-            const groupsCollection = collection(firestore, 'groups')
             const groupRef = doc(groupsCollection, user.groupId)
             getDoc(groupRef).then(response => {
                 setGroup({ ...response.data(), id: response.id })
                 setLoading(false);
             })
         }
-    }, [])
+        else {
+            unsub = onSnapshot(groupsCollection, response => {
+                let data = [];
+                response.forEach(doc => {
+                    data.push({ ...doc.data(), id: doc.id })
+                });
+                setGroups(data);
+                setLoading(false)
+            })
+        }
+    }, [user.groupId])
+
+    useEffect(unsub, [])
+
+    const joinGroup = (id) => {
+        const firestore = getFirestore();
+        const userDoc = doc(collection(firestore, "users"), user.id);
+        setDoc(userDoc, { groupId: id }, { merge: true }).then(() => {
+            setUser(prev => ({ ...prev, groupId: id }))
+        });
+    }
+
+    const newGroup = () => {
+        let response = prompt("Name your group: ")
+        const firestore = getFirestore();
+        const groupCollection = collection(firestore, "groups");
+        addDoc(groupCollection, {
+            name: response
+        }).then(snapshot => {
+            joinGroup(snapshot.id);
+        })
+    }
+
     return (
         <div>
             <div className={styles.nav}>
                 <a className={page == 0 ? styles.active : ''} onClick={() => setPages(0)}>Chat</a>
                 <a className={page == 1 ? styles.active : ''} onClick={() => setPages(1)}>Posts</a>
             </div>
-            {loading ? <h3>Loading...</h3> :
+            {loading ? <h3>Loading...</h3> : user?.groupId ?
                 <Component group={group} />
+                :
+                <div>
+                    {groups.map(group => (
+                        <>
+                            <div key={group.id} className={styles.groupCard}>
+                                <h3>{group.name}</h3>
+                                <a className="button" onClick={() => joinGroup(group.id)}>Join</a>
+                            </div>
+                            <div className={styles.new} onClick={newGroup}>
+                                <div />
+                            </div>
+                        </>
+                    ))}
+                </div>
             }
         </div>
     )
