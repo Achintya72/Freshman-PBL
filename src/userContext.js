@@ -84,7 +84,8 @@ function UserContextProvider({ children }) {
         fetchUserTasks,
         userTasks,
         setUserTasks,
-        completeTask
+        completeTask,
+        setUser
     }
     return (
         <UserContext.Provider value={value}>

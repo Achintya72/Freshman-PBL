@@ -1,10 +1,10 @@
 import styles from "./dashboard.module.css";
 import UserContext from "../userContext";
 import { useContext, useEffect, useRef, useState } from "react"
-import { Timestamp } from "firebase/firestore";
+import { addDoc, collection, doc, getFirestore, Timestamp } from "firebase/firestore";
 import CloseIcon from "../Assets/Close.svg";
 import { WebcamCapture } from "../Webcam";
-import { getStorage, ref, uploadBytes, uploadBytesResumable, uploadString } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable, uploadString } from "firebase/storage";
 function Dashboard({ shift, tasks }) {
     const { user } = useContext(UserContext);
     let tasksExist = false;
@@ -69,6 +69,20 @@ const Task = ({ task, complete }) => {
                         const picRef = ref(store, `${user.id}/${task.Name}.jpg`);
                         const uploadTask = uploadBytes(picRef, buffer, metadata);
                         uploadTask.then(response => {
+                            if (user?.groupId) {
+                                getDownloadURL(response.ref).then(url => {
+                                    const firestore = getFirestore();
+                                    const groupRef = doc(collection(firestore, 'groups'), user?.groupId);
+                                    const postsRef = collection(groupRef, 'posts');
+                                    addDoc(postsRef, {
+                                        likedBy: [],
+                                        pictureUrl: url,
+                                        title: task.Name,
+                                        userName: user.name
+                                    })
+
+                                })
+                            }
                             complete(task);
                         })
                     })

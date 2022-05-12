@@ -6,7 +6,7 @@ import DashboardNav from "./dashboardNav";
 import Home from "./home";
 import Settings from "./settings";
 import Leaderboard from "./leaderboard";
-import Community from "./community";
+import Community from "./Community";
 
 
 const pages = [
