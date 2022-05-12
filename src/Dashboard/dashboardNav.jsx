@@ -15,7 +15,7 @@ export default function DashboardNav({ callBack }) {
         <div className={styles.navbar}>
             {
                 pages.map((p, i) => (
-                    <div onClick={() => {
+                    <div key={i} onClick={() => {
                         callBack(i);
                         setPage(i);
                     }} className={`${p} ${i == page && styles.active}`} />

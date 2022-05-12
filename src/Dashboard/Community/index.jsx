@@ -1,11 +1,64 @@
-import { collection, getFirestore, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { collection, getFirestore, doc, getDoc, setDoc, onSnapshot, addDoc, Timestamp } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../userContext";
 import styles from "./styles.module.css";
+import NewIcon from "../../Assets/New.svg"
+const Chat = ({ group }) => {
+    const [chat, setChat] = useState(null);
+    const { user } = useContext(UserContext);
+    useEffect(() => {
+        let unsub = () => { };
+        if (group?.id) {
+            const firestore = getFirestore();
+            const groupRef = doc(collection(firestore, 'groups'), group?.id);
+            const messagesRef = collection(groupRef, 'chat')
+            unsub = onSnapshot(messagesRef, response => {
+                const data = [];
+                response.forEach(doc => {
+                    data.push({ ...doc.data(), id: doc.id })
+                });
+                data.sort((a, b) => b.timeSent.toDate() < a.timeSent.toDate() ? 1 : -1)
+                setChat(data);
+            })
+        }
+        return unsub;
+    }, [])
 
-const Chat = (props) => {
+    const newMessage = (e) => {
+        let response = window.prompt('What is your message?');
+        if (response) {
+            const firestore = getFirestore();
+            const groupRef = doc(collection(firestore, 'groups'), group?.id);
+            const messagesRef = collection(groupRef, 'chat')
+            addDoc(messagesRef, {
+                message: response,
+                name: user.name,
+                timeSent: Timestamp.fromDate(new Date()),
+                uid: user.id
+            })
+        }
+    }
     return (
-        <div>Chat</div>
+        <div className={styles.chat}>
+
+            {
+                chat?.map(message => {
+                    let timestamp = message.timeSent.toDate();
+                    return (
+                        <div className={message.uid == user.id ? styles.self : styles.other}>
+                            <p className={styles.message}>{message.message}</p>
+                            <div className={styles.metadata}>
+                                <p className={styles.details}>{message.name}</p>
+                                <p className={styles.details}>{timestamp.getHours()}:{timestamp.getMinutes()}</p>
+                            </div>
+                        </div>
+                    )
+                })
+            }
+            <div className={styles.new} onClick={newMessage}>
+                <div />
+            </div>
+        </div>
     )
 }
 
@@ -55,13 +108,14 @@ const Post = ({ post, setPosts, index, group }) => {
 const Posts = ({ group }) => {
     const [posts, setPosts] = useState(null);
     useEffect(() => {
+        let unsub = () => { }
         if (group?.id) {
             const firestore = getFirestore();
             const groupsCollection = collection(firestore, 'groups')
             const groupRef = doc(groupsCollection, group?.id);
             const postsRef = collection(groupRef, 'posts')
 
-            getDocs(postsRef).then(response => {
+            unsub = onSnapshot(postsRef, response => {
                 const data = [];
                 response.forEach(doc => {
                     data.push({ ...doc.data(), id: doc.id })
@@ -71,7 +125,7 @@ const Posts = ({ group }) => {
         }
         return () => {
             if (group?.id) {
-
+                unsub();
             }
         }
     }, [])
