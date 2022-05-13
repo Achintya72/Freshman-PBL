@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs, Timestamp } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, Timestamp, increment } from "firebase/firestore";
 import { useNavigate } from "react-router-dom"
 
 const UserContext = createContext(null);
@@ -74,6 +74,12 @@ function UserContextProvider({ children }) {
         setDoc(userRef, { tasksComplete: newUserTasks, points }, { merge: true, mergeFields: true })
             .then(response => {
                 setUser(prev => ({ ...prev, tasksComplete: newUserTasks, points }));
+                if (user?.groupId) {
+                    const groupRef = doc(collection(db, 'groups'), user.groupId);
+                    setDoc(groupRef, {
+                        points: increment(userTasks[index].points)
+                    }, { merge: true, mergeFields: true })
+                }
             })
     }
     const value = {
