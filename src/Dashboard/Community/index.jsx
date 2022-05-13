@@ -1,4 +1,4 @@
-import { collection, getFirestore, doc, getDoc, setDoc, onSnapshot, addDoc, Timestamp, getDocs } from "firebase/firestore";
+import { collection, getFirestore, doc, getDoc, setDoc, onSnapshot, addDoc, Timestamp, arrayRemove, arrayUnion } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../userContext";
 import styles from "./styles.module.css";
@@ -40,21 +40,22 @@ const Chat = ({ group }) => {
     }
     return (
         <div className={styles.chat}>
-
-            {
-                chat?.map(message => {
-                    let timestamp = message.timeSent.toDate();
-                    return (
-                        <div className={message.uid == user.id ? styles.self : styles.other}>
-                            <p className={styles.message}>{message.message}</p>
-                            <div className={styles.metadata}>
-                                <p className={styles.details}>{message.name}</p>
-                                <p className={styles.details}>{timestamp.getHours()}:{timestamp.getMinutes()}</p>
+            <div className={styles.scroll}>
+                {
+                    chat?.map(message => {
+                        let timestamp = message.timeSent.toDate();
+                        return (
+                            <div className={message.uid == user.id ? styles.self : styles.other}>
+                                <p className={styles.message}>{message.message}</p>
+                                <div className={styles.metadata}>
+                                    <p className={styles.details}>{message.name}</p>
+                                    <p className={styles.details}>{timestamp.getHours()}:{timestamp.getMinutes()}</p>
+                                </div>
                             </div>
-                        </div>
-                    )
-                })
-            }
+                        )
+                    })
+                }
+            </div>
             <div className={styles.new} onClick={newMessage}>
                 <div />
             </div>
@@ -67,23 +68,21 @@ const Post = ({ post, setPosts, index, group }) => {
     const { user } = useContext(UserContext);
     const [fav, setFav] = useState(post?.likedBy?.includes(user.id));
     const like = () => {
-        setPosts(prev => {
-            let i = prev[index].likedBy.indexOf(user.id);
-            if (fav && i != -1) {
-                prev[index].likedBy.splice(i, 1);
-            }
-            else if (!fav && i == -1) {
-                prev[index].likedBy.push(user.id)
-            }
-            return prev;
-        })
-        setFav(prev => !prev);
         const firestore = getFirestore();
-        const groupsCollection = collection(firestore, 'groups')
-        const groupRef = doc(groupsCollection, group?.id);
-        const postsRef = collection(groupRef, 'posts')
-        const postRef = doc(postsRef, post.id);
-        setDoc(postRef, post);
+        const groupRef = doc(collection(firestore, 'groups'), group.id)
+        const postsRef = doc(collection(groupRef, 'posts'), post.id);
+        if (fav) {
+            setDoc(postsRef, {
+                likedBy: arrayRemove(user.id)
+            }, { merge: true, mergeFields: true })
+            setFav(false)
+        }
+        else {
+            setDoc(postsRef, {
+                likedBy: arrayUnion(user.id)
+            }, { merge: true, mergeFields: true });
+            setFav(true)
+        }
     }
     return (
         <div className={styles.post}>
@@ -195,7 +194,7 @@ export default function Community(props) {
     }
 
     return (
-        <div>
+        <div className={styles.container}>
             <div className={styles.nav}>
                 <a className={page == 0 ? styles.active : ''} onClick={() => setPages(0)}>Chat</a>
                 <a className={page == 1 ? styles.active : ''} onClick={() => setPages(1)}>Posts</a>

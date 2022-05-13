@@ -5,7 +5,7 @@ import styles from "./dashboard.module.css";
 import DashboardNav from "./dashboardNav";
 import Home from "./home";
 import Settings from "./settings";
-import Leaderboard from "./leaderboard";
+import Leaderboard from "./Leaderboard";
 import Community from "./Community";
 
 
