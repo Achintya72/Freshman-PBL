@@ -15,7 +15,6 @@ export const WebcamCapture = ({ closeSelf, finishPic }) => {
 
     const capture = useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
-        console.log(webcamRef.current)
         setImage(imageSrc);
     })
     return (
@@ -24,14 +23,12 @@ export const WebcamCapture = ({ closeSelf, finishPic }) => {
                 {image == "" ?
                     <Webcam
                         audio={false}
-                        height={200}
                         ref={webcamRef}
                         screenshotFormat="image/jpeg"
-                        width={400}
                         videoConstraints={videoConstraints}
                     /> : <img src={image} />
                 }
-                <img src={CloseIcon} onClick={closeSelf} />
+                <img src={CloseIcon} onClick={closeSelf} className={styles.close} />
             </div>
             <div>
                 {image != "" ?

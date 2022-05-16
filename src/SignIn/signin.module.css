@@ -30,7 +30,7 @@
 }
 
 .active {
-    background-color: #ff0000;
+    background-color: #00b100;
     color: #fff;
 }
 
@@ -55,11 +55,17 @@
 }
 
 .selected {
-    background-color: #ffe9e9;
-    border: 2px solid #ff0000;
+    background-color: #9FEF9F;
+    border: 2px solid #00b100;
 
 }
 
 .selected p {
     font-weight: 600;
+}
+
+.message {
+    padding: 15px 20px;
+    background-color: #9FEF9F;
+    border-radius: 15px;
 }

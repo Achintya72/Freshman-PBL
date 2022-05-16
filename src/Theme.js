@@ -28,10 +28,10 @@ const themeObject = {
         },
     },
     color: {
-        dark: '#d74b4b',
-        extraLight: '#ffe8e8',
-        light: '#ff9393',
-        normal: '#ff0000'
+        dark: '#296636',
+        extraLight: '#9FEF9F',
+        light: '#4dc94d',
+        normal: '#00b100'
     }
 };
 

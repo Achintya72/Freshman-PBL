@@ -4,7 +4,7 @@ import Home from './Home';
 import Authentication from './SignIn';
 import Dashboard from './Dashboard';
 import Navbar from "./Navbar.jsx"
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import UserContext from "./userContext";
 import { initializeApp } from "firebase/app"
 const firebaseConfig = {
@@ -26,7 +26,10 @@ function ProtectedRoute({ user, children }) {
 }
 
 function App() {
-  const app = initializeApp(firebaseConfig);
+  useEffect(() => {
+    const app = initializeApp(firebaseConfig);
+
+  }, [])
   const { user } = useContext(UserContext);
   return (
     <>

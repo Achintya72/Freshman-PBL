@@ -4,7 +4,7 @@ import { Timestamp } from "firebase/firestore";
 import styles from "./dashboard.module.css";
 import DashboardNav from "./dashboardNav";
 import Home from "./home";
-import Settings from "./settings";
+import Settings from "./Settings";
 import Leaderboard from "./Leaderboard";
 import Community from "./Community";
 

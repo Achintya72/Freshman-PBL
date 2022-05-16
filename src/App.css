@@ -4,14 +4,14 @@
   justify-content: center;
   align-items: center;
   padding: 15px 20px;
-  background-color: #FF0000;
-  color: #FFe8e8;
+  background-color: #00b100;
+  color: #fff;
   border-radius: 30px;
   transition: background-color 100ms ease-in-out;
 }
 
 .button:hover {
-  background-color: #ff9393;
+  background-color: #4dc94d;
 }
 
 .banner {
@@ -37,6 +37,18 @@ input {
 }
 
 input:focus {
-  border: #FF0000 2px solid;
-  background-color: #FFe8e8;
+  border: #00b100 2px solid;
+}
+
+.closeIcon {
+  height: 24px;
+  width: 24px;
+  background-color: #000;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-image: url("./Assets/Close.svg");
 }

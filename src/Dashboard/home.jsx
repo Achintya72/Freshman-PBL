@@ -1,12 +1,12 @@
 import styles from "./dashboard.module.css";
 import UserContext from "../userContext";
 import { useContext, useEffect, useRef, useState } from "react"
-import { addDoc, collection, doc, getFirestore, Timestamp } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getFirestore, setDoc, Timestamp } from "firebase/firestore";
 import CloseIcon from "../Assets/Close.svg";
 import { WebcamCapture } from "../Webcam";
 import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable, uploadString } from "firebase/storage";
 function Dashboard({ shift, tasks }) {
-    const { user } = useContext(UserContext);
+    const { user, userImg } = useContext(UserContext);
     let tasksExist = false;
     tasks.forEach(task => {
         if (task) {
@@ -17,7 +17,10 @@ function Dashboard({ shift, tasks }) {
     return (
         <div className={styles.bottom}>
             <p>Points: {user.points ?? 0}</p>
-            <h2>Welcome, {user.name}</h2>
+            <div className={styles.greeting}>
+                <h2>Welcome, {user.name}</h2>
+                <img src={userImg} className={styles.avatar} />
+            </div>
             <p>{tasksExist && (
                 <div className={styles.tasks}>
                     <h3>You've Got New Tasks</h3>
@@ -80,6 +83,12 @@ const Task = ({ task, complete }) => {
                                         title: task.Name,
                                         userName: user.name
                                     })
+                                        .then(response => {
+                                            const userRef = doc(collection(firestore, "users"), user.id);
+                                            setDoc(userRef, {
+                                                posts: arrayUnion(response.id)
+                                            }, { merge: true, mergeFields: true })
+                                        })
 
                                 })
                             }
