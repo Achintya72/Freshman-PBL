@@ -36,6 +36,12 @@ const Chat = ({ group }) => {
                 timeSent: Timestamp.fromDate(new Date()),
                 uid: user.id
             })
+                .then(response => {
+                    const userRef = doc(collection(firestore, "users"), user.id);
+                    setDoc(userRef, {
+                        messages: arrayUnion(response.id)
+                    }, { merge: true, mergeFields: true });
+                })
         }
     }
     return (

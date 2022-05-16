@@ -1,0 +1,86 @@
+.input {
+    padding: 0 0 2px 0;
+    border: none;
+    border-radius: 0;
+    flex: 1;
+}
+
+.input:focus {
+    outline: none;
+    border: none;
+    border-bottom: #00b100 2px solid;
+}
+
+.confirm {
+    width: 30px;
+    height: 30px;
+    background-color: #00b100;
+    border-radius: 50%;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-image: url("../../Assets/Confirm.svg");
+}
+
+.close {
+    width: 30px;
+    height: 30px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-image: url("../../Assets/Close.svg");
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+
+    p {
+        flex: 1
+    }
+}
+
+.groupCard {
+    border: 1px solid grey;
+    display: flex;
+    width: 25%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 20px;
+}
+
+.selected {
+    background-color: #9FEF9F;
+    border: 2px solid #00b100;
+
+}
+
+.message {
+    padding: 15px 20px;
+    background-color: #9FEF9F;
+    border-radius: 15px;
+}
+
+form img {
+    width: 50px;
+    height: 50px;
+}

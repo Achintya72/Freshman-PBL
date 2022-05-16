@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     flex: 1;
-    box-shadow: rgba(255, 0, 0, 0.15) 0px 6px 24px 0px;
+    box-shadow: rgba(0, 177, 0, 0.15) 0px 6px 24px 0px;
 }
 
 .nav a {
@@ -12,8 +12,8 @@
 }
 
 .active {
-    border-bottom: 2px solid #ff0000;
-    background-color: #ffe5e5;
+    border-bottom: 2px solid #00b100;
+    background-color: #9FEF9F;
 }
 
 .pos {
@@ -43,7 +43,7 @@
 .place1 {
     width: 50px;
     height: 50px;
-    background-color: #d74b4b;
+    background-color: #296636;
     text-align: center;
     font-size: 1.5rem;
 }
@@ -51,7 +51,7 @@
 .place2 {
     width: 40px;
     height: 40px;
-    background-color: #ff0000;
+    background-color: #00b100;
     text-align: center;
     font-size: 1.25rem
 }
@@ -59,7 +59,7 @@
 .place3 {
     width: 30px;
     height: 30px;
-    background-color: #ff9393;
+    background-color: #4dc94d;
     text-align: center;
 }
 

@@ -3,7 +3,7 @@ import { useState, useContext } from "react";
 import CloseIcon from "./Assets/Close.svg"
 import { Link } from "react-router-dom";
 import UserContext from "./userContext";
-
+import "./App.css"
 const pages = [
     {
         name: 'Home',
@@ -21,7 +21,7 @@ export default function Navbar(props) {
         <nav>
             <div className="banner">
                 <a>Gaem</a>
-                {open ? <img src={CloseIcon} onClick={toggleOpen} /> : <img src={MenuIcon} onClick={toggleOpen} />}
+                {open ? <a src={CloseIcon} className="closeIcon" onClick={toggleOpen} /> : <img src={MenuIcon} onClick={toggleOpen} />}
             </div>
             {open &&
                 <>

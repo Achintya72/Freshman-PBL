@@ -1,72 +1,82 @@
 import { createContext, useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, Timestamp, increment } from "firebase/firestore";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 const UserContext = createContext(null);
 
 function UserContextProvider({ children }) {
     const [user, setUser] = useState(null);
     const [userTasks, setUserTasks] = useState(null);
+    const [userImg, setUserImg] = useState("");
     const navigate = useNavigate()
+    const a = getAuth();
+    const [loading, setLoading] = useState(false);
+    const db = getFirestore();
+    const auth = getAuth();
 
-    useEffect(() => {
-        if (user) {
-            fetchUserTasks();
+    async function fetchUserTasks(userData) {
+        const tasksCollection = collection(db, "tasks");
+        const levelDocRef = doc(tasksCollection, (userData?.level ?? "1"))
+        const userLevelCollection = collection(levelDocRef, userData?.group)
+        try {
+            const snapshot = await getDocs(userLevelCollection);
+            let data = [];
+            snapshot.docs.forEach(document => {
+                data.push(document.data())
+            });
+            data.sort((a, b) => a.index - b.index);
+            setUserTasks(data);
+            return Promise.resolve();
         }
-    }, [user])
-    function signInEmailPassword(email, password) {
-        const auth = getAuth()
-        signInWithEmailAndPassword(auth, email, password)
-            .then(response => {
-                const db = getFirestore();
-                const userDocRef = doc(db, 'users', response.user.uid)
-                getDoc(userDocRef)
-                    .then(document => {
-                        setUser({ ...document.data(), id: response.user.uid })
-                        navigate('/dashboard')
-                    })
-            })
+        catch (error) {
+            return Promise.reject(error);
+        }
     }
-    function createUserEmailPassword(email, password, data) {
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(response => {
-                const db = getFirestore();
-                const userDocRef = doc(db, 'users', response.user.uid)
-                setDoc(userDocRef, { ...data }, { merge: true, mergeFields: true })
-                    .then(document => {
-                        setUser(prev => ({ ...prev, ...data, id: response.user.uid }))
-                        navigate('/dashboard')
-                    })
-            })
-    }
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setLoading(true);
+                setUserImg((user.photoURL ?? ""));
+                const userRef = doc(collection(db, "users"), user.uid);
+                getDoc(userRef).then((document) => {
+                    setUser(document.data());
+                    fetchUserTasks(document.data())
+                        .then(() => {
+                            setLoading(false);
+                        });
+                });
 
-    function signOutUser() {
+
+            }
+            else {
+                setUserTasks(null);
+                setUser(null);
+                setUserImg("");
+            }
+        })
+        return unsubscribe;
+    }, []);
+    async function createUserEmailPassword(email, password, data) {
         const auth = getAuth();
+        try {
+            const response = await createUserWithEmailAndPassword(auth, email, password)
+            const userDocRef = doc(db, "users", response.user.uid);
+            const doc = await setDoc(userDocRef, { ...data }, { merge: true, mergeFields: true });
+            setUser(prev => ({ ...prev, ...data, id: response.user.uid }));
+            return Promise.resolve();
+        }
+        catch (error) {
+            return Promise.reject(error);
+        }
+    }
+    function signOutUser() {
         signOut(auth).then(response => {
             navigate("/")
             setUser(null);
         })
     }
-
-    function fetchUserTasks() {
-        const db = getFirestore();
-        const tasksCollection = collection(db, "tasks");
-        const levelDocRef = doc(tasksCollection, (user?.level ?? "1"))
-        const userLevelCollection = collection(levelDocRef, user.group)
-        getDocs(userLevelCollection)
-            .then((snapshot) => {
-                let data = [];
-                snapshot.docs.forEach(doc => {
-                    data.push(doc.data());
-                });
-                data.sort((a, b) => a.index - b.index)
-                setUserTasks(data)
-            })
-    }
     function completeTask(index) {
-        const db = getFirestore();
         const userRef = doc(collection(db, 'users'), user.id)
         let newUserTasks = (user?.tasksComplete ?? [0, 0, 0])
         newUserTasks[index] = Timestamp.fromDate(new Date());
@@ -84,14 +94,15 @@ function UserContextProvider({ children }) {
     }
     const value = {
         user,
-        signInEmailPassword,
         createUserEmailPassword,
         signOutUser,
         fetchUserTasks,
         userTasks,
         setUserTasks,
         completeTask,
-        setUser
+        setUser,
+        userImg,
+        setUserImg
     }
     return (
         <UserContext.Provider value={value}>

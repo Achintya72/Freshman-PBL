@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     flex: 1;
-    box-shadow: rgba(255, 0, 0, 0.15) 0px 6px 24px 0px;
+    box-shadow: rgba(0, 177, 0, 0.15) 0px 6px 24px 0px;
 }
 
 .nav a {
@@ -12,8 +12,8 @@
 }
 
 .active {
-    border-bottom: 2px solid #ff0000;
-    background-color: #ffe5e5;
+    border-bottom: 2px solid #00b100;
+    background-color: #9FEF9F;
 }
 
 .post {
@@ -22,7 +22,7 @@
     padding-bottom: 20px;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: rgba(255, 0, 0, 0.15) 4px 4px 16px;
+    box-shadow: rgba(0, 177, 0, 0.15) 4px 4px 16px;
     margin: auto;
     margin-bottom: 10px;
 }
@@ -30,7 +30,7 @@
 .groupCard {
     margin-top: 20px;
     padding: 20px;
-    background-color: #ffe5e5;
+    background-color: #9FEF9F;
     border-radius: 20px;
 }
 
@@ -62,11 +62,11 @@
 }
 
 .heart:hover {
-    background-color: #ff0000;
+    background-color: #00b100;
 }
 
 .activeHeart {
-    background-color: #ff0000;
+    background-color: #00b100;
     mask-image: url('../../Assets/HeartFilled.svg');
 }
 
@@ -98,7 +98,7 @@
 }
 
 .other .message {
-    background-color: #ffe5e5;
+    background-color: #9FEF9F;
     padding: 10px;
     border-radius: 2rem 2rem 2rem 0;
     text-align: left;
@@ -121,7 +121,7 @@
 }
 
 .self .message {
-    background-color: #ff0000;
+    background-color: #00b100;
     color: #fff;
     padding: 10px;
     border-radius: 2rem 2rem 0 2rem;
@@ -145,13 +145,13 @@
 .new {
     width: fit-content;
     height: fit-content;
-    background-color: #ff0000;
+    background-color: #00b100;
     padding: 20px;
     border-radius: 3rem;
     position: fixed;
     bottom: 80px;
     right: 40px;
-    box-shadow: rgba(255, 0, 0, 0.5) 0 0 8px 2px;
+    box-shadow: rgba(0, 177, 0, 0.5) 0 0 8px 2px;
 }
 
 .container {

@@ -1,8 +1,9 @@
 import styles from "./signin.module.css";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../userContext";
 import SignUp from "./signUp";
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 const useLoginDetails = (initialState) => {
     const [details, setDetails] = useState(initialState);
 
@@ -13,7 +14,6 @@ const useLoginDetails = (initialState) => {
 
     return [details, handleChange];
 }
-
 function Authentication() {
     const [signIn, setSignIn] = useState(true);
     return (
@@ -22,25 +22,41 @@ function Authentication() {
         </>
     )
 }
-
-
 function SignIn({ callBack }) {
     const [{ email, password }, handleChange] = useLoginDetails({
         email: '',
         password: ''
     });
+    const navigate = useNavigate();
+    const [message, setMessage] = useState("");
+    const auth = getAuth();
     const [loading, setLoading] = useState(false)
-    const { signInEmailPassword } = useContext(UserContext);
+    const { createUserEmailPassword } = useContext(UserContext);
     function signIn() {
         setLoading(true);
-        signInEmailPassword(email, password);
+        signInWithEmailAndPassword(auth, email, password)
+            .then(response => {
+                setLoading(false);
+                navigate("/dashboard");
+            })
+            .catch(error => {
+                setMessage(error.message);
+                setLoading(false);
+            })
     }
 
+    useEffect(() => {
+        if (message !== "") {
+            setTimeout(() => setMessage(""), 5000)
+        }
+
+    }, [message])
     return (
         <div className={styles.container}>
             {!loading ? (
                 <>
                     <h1>Sign In</h1>
+                    {message != "" && <p className={styles.message}>{message}</p>}
                     <input
                         name="email"
                         className={styles.input}

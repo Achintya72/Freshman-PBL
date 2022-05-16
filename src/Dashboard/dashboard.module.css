@@ -1,5 +1,5 @@
 .tasks {
-    background-color: #FF9393;
+    background-color: #9fef9f;
     padding: 15px 20px;
     border-radius: 30px;
     display: flex;
@@ -9,7 +9,7 @@
 }
 
 .active {
-    background-color: #FF0000 !important;
+    background-color: #00b100 !important;
 }
 
 .home {
@@ -29,7 +29,7 @@
     display: flex;
     justify-content: space-between;
     padding: 15px 20px;
-    box-shadow: rgba(255, 0, 0, 0.15) 0px -5px 20px;
+    box-shadow: rgba(0, 177, 0, 0.15) 0px -5px 20px;
     position: fixed;
     bottom: 0;
     left: 40px;
@@ -85,7 +85,7 @@
 .task {
     display: flex;
     flex-direction: column;
-    background-color: #FF9393;
+    background-color: #9fef9f;
     padding: 15px 20px;
     border-radius: 20px;
     margin-bottom: 20px;
@@ -98,4 +98,16 @@
 .task .actions a {
     flex: 1;
     margin-bottom: 10px;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.greeting {
+    display: flex;
+    justify-content: space-between;
 }
