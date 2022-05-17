@@ -150,7 +150,7 @@
     border-radius: 3rem;
     position: fixed;
     bottom: 80px;
-    right: 40px;
+    left: 40px;
     box-shadow: rgba(0, 177, 0, 0.5) 0 0 8px 2px;
 }
 
@@ -167,4 +167,36 @@
 .scroll {
     flex: 1 1 auto;
     overflow-y: auto;
+}
+
+.modal {
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: rgba(0, 177, 0, 0.15) 5px 5px 20px;
+    border-radius: 30px;
+    overflow: hidden;
+    width: max(60vw, 300px);
+
+    .details {
+        padding: 15px 20px;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.image {
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }

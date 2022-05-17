@@ -40,7 +40,7 @@ function UserContextProvider({ children }) {
                 setUserImg((user.photoURL ?? ""));
                 const userRef = doc(collection(db, "users"), user.uid);
                 getDoc(userRef).then((document) => {
-                    setUser(document.data());
+                    setUser({ ...document.data(), id: user.uid });
                     fetchUserTasks(document.data())
                         .then(() => {
                             setLoading(false);

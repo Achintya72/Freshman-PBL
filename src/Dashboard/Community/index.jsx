@@ -1,8 +1,10 @@
 import { collection, getFirestore, doc, getDoc, setDoc, onSnapshot, addDoc, Timestamp, arrayRemove, arrayUnion } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import UserContext from "../../userContext";
-import styles from "./styles.module.css";
-import NewIcon from "../../Assets/New.svg"
+import styles from "./styles.module.scss";
+import NewIcon from "../../Assets/New.svg";
+import CloseIcon from "../../Assets/Close.svg"
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 const Chat = ({ group }) => {
     const [chat, setChat] = useState(null);
     const { user } = useContext(UserContext);
@@ -95,6 +97,7 @@ const Post = ({ post, setPosts, index, group }) => {
             <img src={post.pictureUrl} />
             <div className={styles.details}>
                 <h3>{post.title}</h3>
+                <p>{post.description}</p>
                 <div className={styles.actions}>
                     <p>{post.userName}</p>
                     <div className={styles.favorites}>
@@ -112,6 +115,20 @@ const Post = ({ post, setPosts, index, group }) => {
 
 const Posts = ({ group }) => {
     const [posts, setPosts] = useState(null);
+    const [active, setActive] = useState(false);
+    const { user } = useContext(UserContext);
+    const db = getFirestore();
+    const storage = getStorage();
+    const inputRef = useRef(null);
+    const [{
+        title,
+        description,
+        pictureUrl
+    }, setPost] = useState({
+        title: "",
+        description: "",
+        pictureUrl: null
+    });
     useEffect(() => {
         let unsub = () => { }
         if (group?.id) {
@@ -133,12 +150,103 @@ const Posts = ({ group }) => {
                 unsub();
             }
         }
-    }, [])
+    }, []);
+
+    const newPost = () => {
+        setActive(true);
+    }
+    const handleChange = (e) => {
+        const { name } = e.target;
+        if (name == "pictureUrl") {
+            setPost(prev => ({
+                ...prev,
+                pictureUrl: e.target.files[0]
+            }));
+        }
+        else {
+            setPost(prev => ({
+                ...prev,
+                [name]: e.target.value
+            }))
+        }
+    }
+
+    const cancel = () => {
+        setPost({
+            title: "",
+            description: "",
+            pictureUrl: ""
+        });
+        setActive(false);
+    }
+
+    const submit = () => {
+        const postsRef = collection(doc(collection(db, "groups"), user.groupId), "posts");
+        addDoc(postsRef, {
+            title: title,
+            description: description,
+            userName: user.name,
+            likedBy: []
+        })
+            .then(response => {
+                const userRef = doc(collection(db, "users"), user.id);
+                setDoc(userRef, {
+                    posts: arrayUnion(response.id)
+                }, { merge: true });
+                if (pictureUrl) {
+                    console.log("pictureUrl")
+                    const len = pictureUrl.name.length;
+                    const storageRef = ref(storage, `${user.id}/${response.id}.${pictureUrl.name[len - 3]}${pictureUrl.name[len - 2]}${pictureUrl.name[len - 1]}`);
+                    uploadBytes(storageRef, pictureUrl).then((r) => {
+                        console.log("Uploading")
+                        getDownloadURL(r.ref).then(url => {
+
+                            setDoc(doc(postsRef, response.id), { pictureUrl: url }, { merge: true })
+                        })
+                        setActive(false);
+                        setPost({
+                            title: "",
+                            description: "",
+                            pictureUrl: ""
+                        });
+                    })
+                }
+            })
+    }
     return (
         <div style={{ marginTop: '1rem' }}>
             {posts?.map((post, index) => (
                 <Post index={index} post={post} group={group} key={post.id} setPosts={setPosts} />
             ))}
+            <div className={styles.new} onClick={newPost}>
+                <div />
+            </div>
+            {active &&
+                <div className={styles.modal}>
+                    <div
+                        style={{
+                            backgroundImage: `url(${pictureUrl ? URL.createObjectURL(pictureUrl) : ""})`
+                        }}
+                        className={styles.image}
+                        onClick={() => inputRef.current.click()}
+                    />
+                    <img src={CloseIcon} className={styles.close} onClick={cancel} />
+                    <input
+                        name="pictureUrl"
+                        type="file"
+                        accept=".png, .jpg"
+                        multiple={false}
+                        ref={inputRef}
+                        style={{ display: "none" }}
+                        onChange={handleChange}
+                    />
+                    <div className={styles.details}>
+                        <input placeholder="Name" name="title" value={title} onChange={handleChange} />
+                        <textarea placeholder="Description" name="description" value={description} onChange={handleChange} />
+                        <a className="button" onClick={submit}>Done</a>
+                    </div>
+                </div>
+            }
         </div>
     )
 }

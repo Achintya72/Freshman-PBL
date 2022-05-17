@@ -71,7 +71,7 @@ export default function Settings(props) {
                             setUserImg(url)
                             updateProfile(auth.currentUser, {
                                 photoURL: url
-                            }).then(() => { console.log("Done"); }).catch((err) => setMessage(err.message));
+                            }).catch((err) => setMessage(err.message));
                         })
                 })
         }
@@ -81,7 +81,6 @@ export default function Settings(props) {
             setPercentage(0);
         }
     }, [percentage])
-    console.log(tempImg)
     return (
         <div className={dashboardStyles.bottom}>
             <p><strong>Avatar: </strong></p>

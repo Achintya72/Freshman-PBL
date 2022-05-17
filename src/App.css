@@ -27,7 +27,8 @@ nav {
   justify-items: flex-start;
 }
 
-input {
+input,
+textarea {
   border: grey 2px solid;
   padding: 15px 20px;
   border-radius: 30px;
@@ -36,7 +37,8 @@ input {
   font-size: 16px;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   border: #00b100 2px solid;
 }
 
