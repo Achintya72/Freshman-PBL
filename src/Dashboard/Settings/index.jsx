@@ -12,6 +12,8 @@ export default function Settings(props) {
     const { user, setUser, userImg, setUserImg } = useContext(UserContext);
     const [message, setMessage] = useState("");
     const [tempImg, setTempImg] = useState();
+    const inputRef = useRef(null);
+    const [percentage, setPercentage] = useState(0);
     const auth = getAuth();
     const storage = getStorage();
     const handleChange = (name, val) => {
@@ -54,10 +56,13 @@ export default function Settings(props) {
             alert("Add Picture First!")
         }
         else {
-            const storageRef = ref(storage, `${user.id}/Avatar.png`);
+            const nameLength = tempImg.name.length;
+            const storageRef = ref(storage, `${user.id}/Avatar.${tempImg.name[nameLength - 3]}${tempImg.name[nameLength - 2]}${tempImg.name[nameLength - 1]}`);
             const uploadTask = uploadBytesResumable(storageRef, tempImg);
 
-            uploadTask.on("state_changed", () => { }, (err) => {
+            uploadTask.on("state_changed", (data) => {
+                setPercentage(Math.round((data.bytesTransferred / data.totalBytes) * 100))
+            }, (err) => {
                 setMessage(err.message);
             },
                 () => {
@@ -71,13 +76,35 @@ export default function Settings(props) {
                 })
         }
     }
+    useEffect(() => {
+        if (percentage == 100) {
+            setPercentage(0);
+        }
+    }, [percentage])
+    console.log(tempImg)
     return (
         <div className={dashboardStyles.bottom}>
             <p><strong>Avatar: </strong></p>
             <form style={{ display: "flex", alignItems: "flex-start" }}>
-                {tempImg ? <img src={URL.createObjectURL(tempImg)} /> : <img src={userImg} />}
-                <input type="file" accept=".png" multiple={false} onChange={handleImageChange} />
-                <a className="button" onClick={handleSubmit}>Submit</a>
+                {tempImg ?
+                    <img src={URL.createObjectURL(tempImg)} onClick={() => inputRef.current.click()} />
+                    : <img src={userImg} onClick={() => inputRef.current.click()} />
+                }
+                <input
+                    type="file"
+                    accept=".png, .jpg"
+                    multiple={false}
+                    onChange={handleImageChange}
+                    ref={inputRef}
+                    style={{ display: "none" }}
+                />
+                {tempImg && <a className="button" onClick={handleSubmit}>Submit</a>}
+                <div style={{
+                    height: "5px",
+                    borderRadius: "2.5px",
+                    backgroundColor: "#00b100",
+                    width: `${percentage}%`
+                }} />
             </form>
             <TextField name="name" value={user.name} label="Name:" handleChange={handleChange} />
             <AgePicker name="group" value={user.group} handleChange={handleChange} />
@@ -136,10 +163,8 @@ const groups = [
 ]
 function AgePicker({ value, name, handleChange }) {
     const [val, setVal] = useState(value);
-    const [active, setActive] = useState(false)
     function submit() {
         handleChange(name, val);
-        setActive(false);
     }
 
     return (
@@ -149,14 +174,13 @@ function AgePicker({ value, name, handleChange }) {
                 {(val !== value) &&
                     <>
                         <div className={styles.close} onClick={() => {
-                            setActive(false)
                             setVal(value)
                         }} />
                         <div className={styles.confirm} onClick={submit} />
                     </>
                 }
             </div>
-            <div className={styles.container}>
+            <div className={`${styles.container} ${styles.groups}`}>
                 {groups.map(g => (
                     <div
                         className={`${styles.groupCard} ${val == g.val && styles.selected}`}
@@ -168,6 +192,6 @@ function AgePicker({ value, name, handleChange }) {
                     </div>
                 ))}
             </div>
-        </div>
+        </div >
     )
 }

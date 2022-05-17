@@ -54,9 +54,14 @@
     justify-content: space-around;
 }
 
-.selected {
-    background-color: #9FEF9F;
-    border: 2px solid #00b100;
+@media screen and (max-width: 528px) {
+    .groups {
+        flex-direction: column;
+    }
+
+    .groupCard {
+        width: 100%;
+    }
 
 }
 
@@ -68,4 +73,5 @@
     padding: 15px 20px;
     background-color: #9FEF9F;
     border-radius: 15px;
+    width: 25%;
 }

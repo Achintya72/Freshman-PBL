@@ -84,3 +84,14 @@ form img {
     width: 50px;
     height: 50px;
 }
+
+@media screen and (max-width: 528px) {
+    .groups {
+        flex-direction: column;
+    }
+
+    .groupCard {
+        width: 100%;
+    }
+
+}
