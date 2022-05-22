@@ -1,4 +1,4 @@
-import styles from "../dashboard.module.css";
+import styles from "../dashboard.module.scss";
 import myStyles from "./styles.module.css"
 import { useContext, useEffect, useState } from "react"
 import { getDocs, getFirestore, orderBy, query, collection } from "firebase/firestore";
@@ -31,7 +31,9 @@ const Individual = (props) => {
                     {Object.keys(positions).map(key => (
                         <div className={myStyles.pos} key={key}>
                             <div className={myStyles.info}>
-                                <p className={`${myStyles.place} ${myStyles['place' + (key < 4 ? key : 4)]}`}>{key}</p>
+                                <div className={myStyles.placeContainer}>
+                                    <p className={`${myStyles.place} ${myStyles['place' + (key < 4 ? key : 4)]}`}>{key}</p>
+                                </div>
                                 <p className={`${user.id == positions[key].id ? myStyles.self : ''}`}>{positions[key].name}</p>
                             </div>
                             <p>{positions[key].points}</p>
@@ -78,7 +80,9 @@ const Group = (props) => {
                         {Object.keys(positions).map(key => (
                             <div className={myStyles.pos} key={key}>
                                 <div className={myStyles.info}>
-                                    <p className={`${myStyles.place} ${myStyles['place' + (key < 4 ? key : 4)]}`}>{key}</p>
+                                    <div className={myStyles.placeContainer}>
+                                        <p className={`${myStyles.place} ${myStyles['place' + (key < 4 ? key : 4)]}`}>{key}</p>
+                                    </div>
                                     <p className={`${user.groupId == positions[key].id ? myStyles.self : ''}`}>{positions[key].name}</p>
                                 </div>
                                 <p>{positions[key].points}</p>

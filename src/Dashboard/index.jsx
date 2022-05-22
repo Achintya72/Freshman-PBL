@@ -1,7 +1,7 @@
 import { useContext, useState } from "react"
 import UserContext from "../userContext"
 import { Timestamp } from "firebase/firestore";
-import styles from "./dashboard.module.css";
+import styles from "./dashboard.module.scss";
 import DashboardNav from "./dashboardNav";
 import Home from "./home";
 import Settings from "./Settings";

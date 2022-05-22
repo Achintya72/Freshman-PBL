@@ -31,6 +31,7 @@ export const WebcamCapture = ({ closeSelf, finishPic }) => {
                 <img src={CloseIcon} onClick={closeSelf} className={styles.close} />
             </div>
             <div>
+                <p className={styles.p}>Make sure to remove any identifiable elements from your picture for your safety</p>
                 {image != "" ?
                     <>
                         <a onClick={(e) => {

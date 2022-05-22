@@ -99,7 +99,6 @@ const Post = ({ post, setPosts, index, group }) => {
                 <h3>{post.title}</h3>
                 <p>{post.description}</p>
                 <div className={styles.actions}>
-                    <p>{post.userName}</p>
                     <div className={styles.favorites}>
                         <p>{post?.likedBy.length}</p>
                         <div
