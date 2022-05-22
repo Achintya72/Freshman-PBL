@@ -1,4 +1,4 @@
-import styles from "./dashboard.module.css";
+import styles from "./dashboard.module.scss";
 import UserContext from "../userContext";
 import { useContext, useEffect, useRef, useState } from "react"
 import { addDoc, arrayUnion, collection, doc, getFirestore, setDoc, Timestamp } from "firebase/firestore";
@@ -33,7 +33,7 @@ function Dashboard({ shift, tasks }) {
 function Tasks({ shift, tasks }) {
     const { user, fetchUserTasks, userTasks, completeTask } = useContext(UserContext);
     useEffect(() => {
-        fetchUserTasks()
+        fetchUserTasks(user)
     }, []);
     let displayTasks = (userTasks ?? []).filter((item, index) => {
         return tasks[index]

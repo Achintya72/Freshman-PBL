@@ -70,3 +70,9 @@
 .place4 {
     color: black;
 }
+
+.placeContainer {
+    width: 100px;
+    display: flex;
+    justify-content: center;
+}

@@ -7,7 +7,7 @@ import styles from "./styles.module.scss";
 import BoyImg from "../../Assets/Boy.png";
 import LadyImg from "../../Assets/Lady.png";
 import GrandmaImg from "../../Assets/Grandma.png";
-import dashboardStyles from "../dashboard.module.css";
+import dashboardStyles from "../dashboard.module.scss";
 export default function Settings(props) {
     const { user, setUser, userImg, setUserImg } = useContext(UserContext);
     const [message, setMessage] = useState("");
